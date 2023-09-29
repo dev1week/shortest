@@ -1,0 +1,35 @@
+spring:
+  profiles:
+    active: local
+    group:
+      local:
+        - common
+      prod:
+        - common
+
+# --- 구분자는 파일을 분할한 것과 같은 효과
+---
+
+# 공통 설정
+spring:
+  config:
+    activate:
+      on-profile: common
+
+
+---
+
+# local 설정
+spring:
+  config:
+    activate:
+      on-profile: local
+
+
+---
+
+# prod 설정
+spring:
+  config:
+    activate:
+      on-profile: prod
