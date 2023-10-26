@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity(name="pharmacy")
+@Entity(name = "pharmacy")
 @Getter
 @Builder
 @NoArgsConstructor
@@ -21,10 +21,8 @@ public class Pharmacy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String pharmacyName;
     private String pharmacyAddress;
     private double latitude;
     private double longitude;
-
 }

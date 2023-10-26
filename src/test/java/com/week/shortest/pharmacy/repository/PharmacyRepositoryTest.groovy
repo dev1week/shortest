@@ -13,7 +13,7 @@ class PharmacyRepositoryTest extends  AbstractionIntegrationContainerBaseTest{
     @Autowired
     private PharmacyRepository pharmacyRepository
 
-    def "Pharmacy Repository save"(){
+    def "PharmacyRepository save"() {
         given:
         String address = "서울 특별시 성북구 종암동"
         String name = "은혜 약국"
@@ -21,20 +21,20 @@ class PharmacyRepositoryTest extends  AbstractionIntegrationContainerBaseTest{
         double longitude = 128.11
 
         def pharmacy = Pharmacy.builder()
-            .pharmacyAddress(address)
-            .pharmacyName(name)
-            .latitude(latitude)
-            .longitude(longitude)
+                .pharmacyAddress(address)
+                .pharmacyName(name)
+                .latitude(latitude)
+                .longitude(longitude)
+                .build()
 
         when:
         def result = pharmacyRepository.save(pharmacy)
 
         then:
+        result.getPharmacyAddress() == address
+        result.getPharmacyName() == name
         result.getLatitude() == latitude
         result.getLongitude() == longitude
-
-
-
     }
 
 
