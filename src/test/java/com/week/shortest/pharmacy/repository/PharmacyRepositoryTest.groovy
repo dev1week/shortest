@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import com.week.shortest.pharmacy.entity.Pharmacy
 import spock.lang.Specification
 
+import java.time.LocalDateTime
 
 
 class PharmacyRepositoryTest extends  AbstractionIntegrationContainerBaseTest{
@@ -71,4 +72,22 @@ class PharmacyRepositoryTest extends  AbstractionIntegrationContainerBaseTest{
     }
 
 
+    def "BaseTimeEntity 등록"(){
+        given:
+        LocalDateTime now = LocalDateTime.now();
+        String address = "서울 특별시 성북구 종암동"
+        String name = "은혜 약국"
+
+        def pharmacy = Pharmacy.builder().pharmacyName(name).pharmacyAddress(address).build()
+
+
+        when:
+        pharmacyRepository.save(pharmacy)
+        def result = pharmacyRepository.findAll()
+
+
+        then:
+        result.get(0).getCreatedDate().isAfter(now)
+        result.get(0).getModifiedDate().isAfter(now)
+    }
 }
