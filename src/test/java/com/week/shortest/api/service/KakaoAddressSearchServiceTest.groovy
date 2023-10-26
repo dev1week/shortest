@@ -1,27 +1,43 @@
 package com.week.shortest.api.service
 
+import com.week.shortest.AbstractionIntegrationContainerBaseTest
+import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 
 import java.nio.charset.StandardCharsets
 
-class KakaoAddressSearchServiceTest extends Specification {
+class KakaoAddressSearchServiceTest extends AbstractionIntegrationContainerBaseTest {
 
-    private KakaoUriBuilderService kakaoUriBuilderService
 
-    def setup(){
-        kakaoUriBuilderService = new KakaoUriBuilderService();
-    }
+    @Autowired
+    private KakaoAddressSearchService kakaoAddressSearchService
 
-    def "buidUriByAddressSearch - 한글 파라미터 인코딩 정상작동 확인"(){
+    def "address 파라미터 값이 null이면, requestAddressSearch 메서드는 null을 리턴한다."(){
         given:
-        String address = "서울 성복구"
-        def charset = StandardCharsets.UTF_8
+        String address = null
 
         when:
-        def uri= kakaoUriBuilderService.buildUriByAddressSearch(address);
-        def decodedResult= URLDecoder.decode(uri.toString(), charset);
+        def result = kakaoAddressSearchService.requestAddressSearch(address)
 
         then:
-        decodedResult == "https://dapi.kakao.com/v2/local/search/address.json?query=서울 성복구";
+        result == null
+
     }
+
+    def "주소값이 유효하다면, requestAddressSearch 메서드는 정상적으로 실행된다."(){
+        given:
+        def address = "서울 성북구 종암로 18길"
+
+        when:
+        def result = kakaoAddressSearchService.requestAddressSearch(address)
+
+        then:
+        result.documentList.size() >0
+        result.metaDto.totalCount > 0
+        result.documentList.get(0).addressName != null
+
+
+
+    }
+
 }
