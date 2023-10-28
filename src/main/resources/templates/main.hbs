@@ -29,11 +29,26 @@
 </div>
 
 <!--부트스트랩 js, jquery 추가-->
-<!-- Kakao 우편번호 서비스 -->
-<!-- https://postcode.map.daum.net/guide -->
-
 <script src="/js/lib/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<!-- Kakao 우편번호 서비스 -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    window.onload = function() {
+        document.getElementById("address_kakao").addEventListener("click", function(){
+
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    document.getElementById("address_kakao").value = data.address;
+                }
+            }).open();
+        });
+    }
+</script>
+<!-- https://postcode.map.daum.net/guide -->
+
+
+
 
 </body>
 </html>
