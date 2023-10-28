@@ -2,13 +2,16 @@ package com.week.shortest.direction.service;
 
 import com.week.shortest.direction.entity.Direction;
 import com.week.shortest.api.dto.DocumentDto;
+import com.week.shortest.direction.repository.DirectionRepository;
 import com.week.shortest.pharmacy.dto.PharmacyDto;
 import com.week.shortest.pharmacy.service.PharmacySearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.geo.Distance;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Slf4j
@@ -20,6 +23,16 @@ public class DirectionService {
     private static final double RADIUS_LIMIT = 10;
 
     private final PharmacySearchService pharmacySearchService;
+
+    private final DirectionRepository directionRepository;
+
+
+    @Transactional
+    public List<Direction> saveAll(List<Direction> directions){
+        if(CollectionUtils.isEmpty(directions)) return Collections.emptyList();
+
+        return directionRepository.saveAll(directions);
+    }
 
 
 
