@@ -1,5 +1,6 @@
 package com.week.shortest.direction.service;
 
+import com.week.shortest.api.service.KakaoCategorySearchService;
 import com.week.shortest.direction.entity.Direction;
 import com.week.shortest.api.dto.DocumentDto;
 import com.week.shortest.direction.repository.DirectionRepository;
@@ -23,8 +24,9 @@ public class DirectionService {
     private static final double RADIUS_LIMIT = 10;
 
     private final PharmacySearchService pharmacySearchService;
-
     private final DirectionRepository directionRepository;
+    private final KakaoCategorySearchService kakaoCategorySearchService;
+
 
 
     @Transactional
@@ -60,6 +62,50 @@ public class DirectionService {
                     build();
             result.add(direction);
         }
+
+
+
+
+
+        Collections.sort(result, Comparator.comparing(Direction::getDistance));
+
+        if(result.size()<=MAX_SEARCH_COUNT){
+            return result;
+        }else{
+            List<Direction> topNResult = new ArrayList<>();
+            for(int i=0; i<MAX_SEARCH_COUNT; i++) {
+                topNResult.add(result.get(i));
+            }
+            return topNResult;
+        }
+    }
+
+    public List<Direction> buildDirectionListByCategorySearch(DocumentDto inputDocumentDto){
+
+        if(Objects.isNull(inputDocumentDto)) return Collections.emptyList();
+
+        List<DocumentDto> searchResult = kakaoCategorySearchService.requestPharmacyCategorySearch(inputDocumentDto.getLatitude(), inputDocumentDto.getLongitude(),10 ).getDocumentList();
+        List<Direction> result = new ArrayList<>();
+
+
+        for(DocumentDto pharmacy : searchResult){
+            double distance = calculateDistance(inputDocumentDto.getLatitude(), inputDocumentDto.getLongitude(), pharmacy.getLatitude(),pharmacy.getLongitude() );
+            if(distance>RADIUS_LIMIT) continue;
+            Direction direction =  Direction.builder().
+                    targetAddress(pharmacy.getPlaceName()).
+                    targetPharmacyName(pharmacy.getAddressName()).
+                    targetLatitude(pharmacy.getLatitude()).
+                    targetLongitude(pharmacy.getLongitude()).
+                    inputAddress(inputDocumentDto.getAddressName()).
+                    inputLatitude(inputDocumentDto.getLatitude()).
+                    inputLongitude(inputDocumentDto.getLongitude()).
+                    distance(distance).
+                    build();
+            result.add(direction);
+        }
+
+
+
 
 
         Collections.sort(result, Comparator.comparing(Direction::getDistance));
