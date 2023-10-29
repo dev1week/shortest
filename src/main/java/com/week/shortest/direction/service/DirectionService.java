@@ -85,6 +85,7 @@ public class DirectionService {
         if(Objects.isNull(inputDocumentDto)) return Collections.emptyList();
 
         List<DocumentDto> searchResult = kakaoCategorySearchService.requestPharmacyCategorySearch(inputDocumentDto.getLatitude(), inputDocumentDto.getLongitude(),10 ).getDocumentList();
+        log.info("[DirectionService buildDirectionListByCategorySearch] searhResult : {}",searchResult);
         List<Direction> result = new ArrayList<>();
 
 
