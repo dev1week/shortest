@@ -43,7 +43,8 @@ dependencies {
     // handlebars
     implementation 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.4'
 
-
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // spock
     testImplementation('org.spockframework:spock-core:2.1-groovy-3.0')
