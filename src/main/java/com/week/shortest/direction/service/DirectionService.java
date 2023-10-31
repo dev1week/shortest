@@ -27,6 +27,11 @@ public class DirectionService {
     private final DirectionRepository directionRepository;
     private final KakaoCategorySearchService kakaoCategorySearchService;
 
+    private final Base62Service base62Service;
+
+
+
+
 
 
     @Transactional
@@ -34,6 +39,12 @@ public class DirectionService {
         if(CollectionUtils.isEmpty(directions)) return Collections.emptyList();
 
         return directionRepository.saveAll(directions);
+    }
+
+
+    public Direction findById(String encodedDirectionId){
+        Long decodedId = base62Service.decodeDirectionId(encodedDirectionId);
+        return directionRepository.findById(decodedId).orElse(null);
     }
 
 
