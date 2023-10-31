@@ -1,5 +1,6 @@
 package com.week.shortest.pharmacy.service;
 
+import com.week.shortest.pharmacy.cache.PharmacyRedisTemplateService;
 import com.week.shortest.pharmacy.dto.PharmacyDto;
 import com.week.shortest.pharmacy.entity.Pharmacy;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,13 @@ public class PharmacySearchService {
 
     private final PharmacyRepositoryService pharmacyRepositoryService;
 
+    private final PharmacyRedisTemplateService pharmacyRedisTemplateService;
+
 
     public List<PharmacyDto> searchPharmacyDtoList(){
-
+        //redis로 먼저 시도
+        List<PharmacyDto> list=  pharmacyRedisTemplateService.findAll();
+        if(!list.isEmpty())return list;
 
 
         //db 관련 로직
